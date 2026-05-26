@@ -7,11 +7,11 @@ export default function BriefPageClient() {
   const { tr, toggleLang, lang } = useLang();
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--background)", overflowX: "hidden" }}>
-      <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 16px", width: "100%" }}>
+    <main style={{ minHeight: "100vh", background: "var(--background)", overflowX: "hidden", width: "100vw" }}>
+      <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 16px", width: "100%", boxSizing: "border-box" }}>
 
         {/* Lang toggle */}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24, width: "100%" }}>
           <button
             onClick={toggleLang}
             style={{
@@ -24,9 +24,10 @@ export default function BriefPageClient() {
               color: "var(--gray-600)",
               cursor: "pointer",
               fontFamily: "inherit",
+              flexShrink: 0,
             }}
           >
-            {lang === "en" ? "🇪🇸 Español" : "🇺🇸 English"}
+            {lang === "en" ? "🇪🇸 ES" : "🇺🇸 EN"}
           </button>
         </div>
 

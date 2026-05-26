@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   description: "Comparte la información de tu proyecto con el equipo de Inmotion.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
