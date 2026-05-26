@@ -22,66 +22,49 @@ export default function LoginForm() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Credenciales incorrectas");
+        setError(data.error || "Invalid credentials");
         return;
       }
       router.refresh();
     } catch {
-      setError("Error de conexión. Intenta de nuevo.");
+      setError("Connection error. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div style={{ width: "100%", maxWidth: 360 }}>
-      <div style={{ textAlign: "center", marginBottom: 28 }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          background: "#fff", border: "1px solid var(--border)",
-          borderRadius: 8, padding: "6px 12px", marginBottom: 16,
-        }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--foreground)" }} />
-          <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.05em" }}>INMOTION</span>
+    <div style={{ minHeight: "100vh", background: "var(--background)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+      <div style={{ width: "100%", maxWidth: 340 }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+            Inmotion
+          </h1>
+          <p style={{ fontSize: 13, color: "var(--gray-500)", marginTop: 4 }}>Admin panel</p>
         </div>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
-          Panel de administración
-        </h1>
+
+        <form onSubmit={handleSubmit} className="card" style={{ padding: 24 }}>
+          <div style={{ marginBottom: 14 }}>
+            <label className="label">Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              required className="input" placeholder="you@email.com" />
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <label className="label">Password</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              required className="input" placeholder="••••••••" />
+          </div>
+
+          {error && (
+            <p style={{ fontSize: 13, color: "var(--error)", textAlign: "center", marginBottom: 14 }}>{error}</p>
+          )}
+
+          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: "100%" }}>
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
       </div>
-
-      <form onSubmit={handleSubmit} className="card" style={{ padding: 24 }}>
-        <div style={{ marginBottom: 16 }}>
-          <label className="label">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="input"
-            placeholder="tu@email.com"
-          />
-        </div>
-
-        <div style={{ marginBottom: 20 }}>
-          <label className="label">Contraseña</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="input"
-            placeholder="••••••••"
-          />
-        </div>
-
-        {error && (
-          <p style={{ fontSize: 13, color: "var(--error)", textAlign: "center", marginBottom: 16 }}>{error}</p>
-        )}
-
-        <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: "100%" }}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
     </div>
   );
 }
