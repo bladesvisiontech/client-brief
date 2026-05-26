@@ -83,12 +83,22 @@ export default function Step1Business({ register, errors, watch }: Props) {
         </div>
 
         {emailSetup === "existing" && (
-          <div style={{ marginTop: 12 }}>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 12 }}>
             <Field label={tr.emailOptionExistingDetailLabel} error={errors.emailSetupDetail?.message}>
-              <input {...register("emailSetupDetail")} className="input" placeholder={tr.emailOptionExistingPlaceholder} />
+              <input
+                {...register("emailSetupDetail", { required: emailSetup === "existing" ? tr.required : false,
+                  pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: tr.invalidEmail } })}
+                type="email" className="input" placeholder={tr.emailOptionExistingPlaceholder}
+              />
             </Field>
-            <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 6 }}>
-              🔒 {tr.emailSecurityNote}
+            <Field label={tr.emailOptionExistingPasswordLabel} error={errors.emailSetupPassword?.message}>
+              <input
+                {...register("emailSetupPassword", { required: emailSetup === "existing" ? tr.required : false })}
+                type="password" className="input" placeholder={tr.emailOptionPasswordPlaceholder}
+              />
+            </Field>
+            <p style={{ fontSize: 12, color: "var(--gray-500)", display: "flex", gap: 6 }}>
+              <span>🔒</span> {tr.emailSecurityNote}
             </p>
           </div>
         )}
@@ -96,7 +106,10 @@ export default function Step1Business({ register, errors, watch }: Props) {
         {emailSetup === "create" && (
           <div style={{ marginTop: 12 }}>
             <Field label={tr.emailOptionCreateDetailLabel} error={errors.emailSetupDetail?.message}>
-              <input {...register("emailSetupDetail")} className="input" placeholder={tr.emailOptionCreatePlaceholder} />
+              <input
+                {...register("emailSetupDetail", { required: emailSetup === "create" ? tr.required : false })}
+                className="input" placeholder={tr.emailOptionCreatePlaceholder}
+              />
             </Field>
           </div>
         )}

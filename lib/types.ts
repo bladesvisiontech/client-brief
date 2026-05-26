@@ -31,8 +31,9 @@ export interface Brief {
   phone: string;
   // Correo del sistema
   notificationEmail: string;
-  emailSetup: "create" | "existing" | "none";
+  emailSetup: "create" | "existing";
   emailSetupDetail: string;
+  emailSetupPassword: string;
   // Paso 2 - Proyecto
   projectType: ProjectType;
   description: string;
