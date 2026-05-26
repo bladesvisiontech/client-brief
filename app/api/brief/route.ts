@@ -1,19 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-
-function getAdminDb() {
-  if (!getApps().length) {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      }),
-    });
-  }
-  return getFirestore();
-}
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,8 +11,7 @@ export async function POST(req: NextRequest) {
     }
 
     const db = getAdminDb();
-    const ref = db.collection("briefs").doc(body.id);
-    await ref.set({
+    await db.collection("briefs").doc(body.id).set({
       ...body,
       createdAt: new Date().toISOString(),
       status: "pending",
@@ -34,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, id: body.id });
   } catch (err) {
-    console.error(err);
+    console.error("Error guardando brief:", err);
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
   }
 }

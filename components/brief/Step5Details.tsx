@@ -49,25 +49,10 @@ export default function Step5Details({ register, errors }: Props) {
         <input {...register("colors")} className="input" placeholder="Ej: azul marino #003366, blanco, dorado" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="label">¿Para cuándo lo necesitas? *</label>
-          <input {...register("deadline", { required: "Campo requerido" })} type="date" className="input" />
-          {errors.deadline && <p className="field-error">{errors.deadline.message}</p>}
-        </div>
-
-        <div>
-          <label className="label">Presupuesto aproximado <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(opcional)</span></label>
-          <select {...register("budget")} className="select">
-            <option value="">Seleccionar...</option>
-            <option value="menos-1m">Menos de $1.000.000 COP</option>
-            <option value="1m-3m">$1.000.000 – $3.000.000 COP</option>
-            <option value="3m-6m">$3.000.000 – $6.000.000 COP</option>
-            <option value="6m-10m">$6.000.000 – $10.000.000 COP</option>
-            <option value="mas-10m">Más de $10.000.000 COP</option>
-            <option value="por-definir">Por definir</option>
-          </select>
-        </div>
+      <div>
+        <label className="label">¿Para cuándo lo necesitas? *</label>
+        <input {...register("deadline", { required: "Campo requerido" })} type="date" className="input" />
+        {errors.deadline && <p className="field-error">{errors.deadline.message}</p>}
       </div>
 
       <div>

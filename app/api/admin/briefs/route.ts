@@ -1,19 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-
-function getAdminDb() {
-  if (!getApps().length) {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      }),
-    });
-  }
-  return getFirestore();
-}
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export async function GET(req: NextRequest) {
   const session = req.cookies.get("admin_session");
@@ -27,7 +13,7 @@ export async function GET(req: NextRequest) {
     const briefs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json({ briefs });
   } catch (err) {
-    console.error(err);
+    console.error("Error obteniendo briefs:", err);
     return NextResponse.json({ error: "Error al obtener briefs" }, { status: 500 });
   }
 }
@@ -44,7 +30,7 @@ export async function PATCH(req: NextRequest) {
     await db.collection("briefs").doc(id).update({ status });
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(err);
+    console.error("Error actualizando brief:", err);
     return NextResponse.json({ error: "Error al actualizar" }, { status: 500 });
   }
 }
