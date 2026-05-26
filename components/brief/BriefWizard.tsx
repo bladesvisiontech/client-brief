@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Brief, BriefAssets } from "@/lib/types";
 import { useLang } from "@/lib/LangContext";
@@ -35,17 +35,17 @@ export default function BriefWizard() {
     5: ["style", "deadline"],
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
   async function next() {
     const valid = await trigger(stepFields[step]);
-    if (valid) {
-      setStep((s) => s + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    if (valid) setStep((s) => s + 1);
   }
 
   function back() {
     setStep((s) => s - 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function onSubmit(data: Brief) {
