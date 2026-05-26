@@ -28,12 +28,6 @@ export default function Step1Business({ register, errors, watch }: Props) {
         <Field label={tr.businessName} error={errors.businessName?.message}>
           <input {...register("businessName", { required: tr.required })} className="input" placeholder={tr.businessPlaceholder} />
         </Field>
-        <Field label={tr.yourEmail} error={errors.email?.message}>
-          <input
-            {...register("email", { required: tr.required, pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: tr.invalidEmail } })}
-            type="email" className="input" placeholder={tr.emailPlaceholder}
-          />
-        </Field>
         <Field label={tr.phone} error={errors.phone?.message}>
           <input {...register("phone", { required: tr.required })} className="input" placeholder={tr.phonePlaceholder} />
         </Field>

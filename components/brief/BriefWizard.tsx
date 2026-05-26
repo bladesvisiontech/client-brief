@@ -28,7 +28,7 @@ export default function BriefWizard() {
   });
 
   const stepFields: Record<number, (keyof Brief)[]> = {
-    1: ["clientName", "businessName", "email", "phone", "notificationEmail", "emailSetup", "emailSetupDetail", "emailSetupPassword"],
+    1: ["clientName", "businessName", "phone", "notificationEmail", "emailSetup", "emailSetupDetail", "emailSetupPassword"],
     2: ["projectType", "description"],
     3: ["sections"],
     4: [],
