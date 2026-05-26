@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Brief, BriefAssets } from "@/lib/types";
+import { useLang } from "@/lib/LangContext";
 import StepIndicator from "./StepIndicator";
 import Step1Business from "./Step1Business";
 import Step2Project from "./Step2Project";
@@ -15,6 +16,7 @@ function generateId() {
 }
 
 export default function BriefWizard() {
+  const { tr } = useLang();
   const [step, setStep] = useState(1);
   const [briefId] = useState(() => generateId());
   const [assets, setAssets] = useState<BriefAssets>({ photos: [], documents: [] });
@@ -38,9 +40,7 @@ export default function BriefWizard() {
     if (valid) setStep((s) => s + 1);
   }
 
-  function back() {
-    setStep((s) => s - 1);
-  }
+  function back() { setStep((s) => s - 1); }
 
   async function onSubmit(data: Brief) {
     setSubmitting(true);
@@ -51,10 +51,10 @@ export default function BriefWizard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("Error al enviar");
+      if (!res.ok) throw new Error();
       setSubmitted(true);
     } catch {
-      alert("Hubo un error al enviar. Por favor intenta de nuevo.");
+      alert("There was an error submitting. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -64,19 +64,19 @@ export default function BriefWizard() {
     return (
       <div style={{ textAlign: "center", padding: "48px 0" }}>
         <div style={{
-          width: 56, height: 56, borderRadius: "50%",
+          width: 48, height: 48, borderRadius: "50%",
           background: "var(--gray-100)", display: "flex",
           alignItems: "center", justifyContent: "center",
-          margin: "0 auto 20px", fontSize: 24,
+          margin: "0 auto 20px", fontSize: 20, color: "var(--foreground)",
         }}>✓</div>
         <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
-          Brief enviado
+          {tr.successTitle}
         </h2>
         <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 8, maxWidth: 360, margin: "8px auto 0" }}>
-          Recibimos toda tu información. Nuestro equipo la revisará y te contactará pronto para comenzar.
+          {tr.successDesc}
         </p>
         <p style={{ fontSize: 12, color: "var(--gray-400)", marginTop: 20 }}>
-          Referencia: <span style={{ fontFamily: "var(--font-geist-mono)" }}>{briefId}</span>
+          {tr.successRef}: <span style={{ fontFamily: "var(--font-geist-mono)" }}>{briefId}</span>
         </p>
       </div>
     );
@@ -95,28 +95,18 @@ export default function BriefWizard() {
       </div>
 
       <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginTop: 32,
-        paddingTop: 24,
-        borderTop: "1px solid var(--border)",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--border)",
       }}>
         {step > 1 ? (
-          <button type="button" onClick={back} className="btn btn-secondary">
-            ← Atrás
-          </button>
-        ) : (
-          <div />
-        )}
+          <button type="button" onClick={back} className="btn btn-secondary">{tr.back}</button>
+        ) : <div />}
 
         {step < 5 ? (
-          <button type="button" onClick={next} className="btn btn-primary">
-            Continuar →
-          </button>
+          <button type="button" onClick={next} className="btn btn-primary">{tr.continue}</button>
         ) : (
           <button type="submit" disabled={submitting} className="btn btn-primary">
-            {submitting ? "Enviando..." : "Enviar brief"}
+            {submitting ? tr.submitting : tr.submit}
           </button>
         )}
       </div>

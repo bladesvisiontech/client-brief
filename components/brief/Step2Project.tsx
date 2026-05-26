@@ -2,38 +2,37 @@
 
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { Brief, ProjectType } from "@/lib/types";
+import { useLang } from "@/lib/LangContext";
 
 interface Props {
   register: UseFormRegister<Brief>;
   errors: FieldErrors<Brief>;
 }
 
-const projectTypes: { value: ProjectType; label: string; desc: string }[] = [
-  { value: "website", label: "Sitio web", desc: "Página institucional o corporativa" },
-  { value: "ecommerce", label: "Tienda online", desc: "Venta de productos o servicios" },
-  { value: "landing", label: "Landing page", desc: "Página de captura o campaña" },
-  { value: "app", label: "Aplicación web", desc: "Sistema o plataforma a medida" },
-  { value: "other", label: "Otro", desc: "Cuéntanos en la descripción" },
-];
-
 export default function Step2Project({ register, errors }: Props) {
+  const { tr } = useLang();
+
+  const projectTypes: { value: ProjectType; label: string; desc: string }[] = [
+    { value: "website",   label: tr.website,   desc: tr.websiteDesc },
+    { value: "ecommerce", label: tr.ecommerce, desc: tr.ecommerceDesc },
+    { value: "landing",   label: tr.landing,   desc: tr.landingDesc },
+    { value: "app",       label: tr.app,       desc: tr.appDesc },
+    { value: "other",     label: tr.other,     desc: tr.otherDesc },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
-          El proyecto
-        </h2>
-        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>
-          Cuéntanos qué quieres construir.
-        </p>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>{tr.step2Title}</h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>{tr.step2Subtitle}</p>
       </div>
 
       <div>
-        <label className="label">Tipo de proyecto *</label>
+        <label className="label">{tr.projectType}</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {projectTypes.map((type) => (
             <label key={type.value} className="option-card">
-              <input type="radio" value={type.value} {...register("projectType", { required: "Selecciona un tipo" })} style={{ accentColor: "var(--foreground)", marginTop: 2 }} />
+              <input type="radio" value={type.value} {...register("projectType", { required: tr.selectType })} style={{ accentColor: "var(--foreground)", marginTop: 2 }} />
               <div>
                 <p style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)" }}>{type.label}</p>
                 <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 1 }}>{type.desc}</p>
@@ -45,21 +44,19 @@ export default function Step2Project({ register, errors }: Props) {
       </div>
 
       <div>
-        <label className="label">Describe tu proyecto *</label>
+        <label className="label">{tr.projectDesc}</label>
         <textarea
-          {...register("description", { required: "Campo requerido", minLength: { value: 20, message: "Mínimo 20 caracteres" } })}
-          rows={4}
-          className="textarea"
-          placeholder="Ej: Necesito un sitio web para mi restaurante donde los clientes puedan ver el menú, hacer reservas y contactarnos..."
+          {...register("description", { required: tr.required, minLength: { value: 20, message: tr.minChars } })}
+          rows={4} className="textarea" placeholder={tr.projectDescPlaceholder}
         />
         {errors.description && <p className="field-error">{errors.description.message}</p>}
       </div>
 
       <div>
-        <label className="label">Páginas de referencia <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(opcional)</span></label>
+        <label className="label">{tr.references} <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>{tr.referencesOptional}</span></label>
         <div className="space-y-2">
-          <input {...register("referenceUrls.0")} className="input" placeholder="https://ejemplo.com" />
-          <input {...register("referenceUrls.1")} className="input" placeholder="https://otro-ejemplo.com" />
+          <input {...register("referenceUrls.0")} className="input" placeholder="https://example.com" />
+          <input {...register("referenceUrls.1")} className="input" placeholder="https://another-example.com" />
         </div>
       </div>
     </div>

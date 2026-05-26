@@ -2,41 +2,34 @@
 
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { Brief } from "@/lib/types";
+import { useLang } from "@/lib/LangContext";
 
 interface Props {
   register: UseFormRegister<Brief>;
   errors: FieldErrors<Brief>;
 }
 
-const styles = [
-  { value: "minimalista", label: "Minimalista", desc: "Limpio, espaciado, tipografía prominente" },
-  { value: "moderno",     label: "Moderno",     desc: "Colores vibrantes, animaciones, dinámico" },
-  { value: "elegante",    label: "Elegante",    desc: "Sofisticado, oscuro, premium" },
-  { value: "corporativo", label: "Corporativo", desc: "Formal, confiable, estructurado" },
-  { value: "creativo",    label: "Creativo",    desc: "Único, experimental, artístico" },
-];
+const styleKeys = ["minimalista", "moderno", "elegante", "corporativo", "creativo"] as const;
 
 export default function Step5Details({ register, errors }: Props) {
+  const { tr } = useLang();
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
-          Últimos detalles
-        </h2>
-        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>
-          Ayúdanos a entender tu visión estética y tiempos.
-        </p>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>{tr.step5Title}</h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>{tr.step5Subtitle}</p>
       </div>
 
       <div>
-        <label className="label">Estilo visual *</label>
+        <label className="label">{tr.visualStyle}</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {styles.map((s) => (
-            <label key={s.value} className="option-card">
-              <input type="radio" value={s.value} {...register("style", { required: "Selecciona un estilo" })} style={{ accentColor: "var(--foreground)", marginTop: 2 }} />
+          {styleKeys.map((s) => (
+            <label key={s} className="option-card">
+              <input type="radio" value={s} {...register("style", { required: tr.selectStyle })} style={{ accentColor: "var(--foreground)", marginTop: 2 }} />
               <div>
-                <p style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)" }}>{s.label}</p>
-                <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 1 }}>{s.desc}</p>
+                <p style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)" }}>{tr.styles[s].label}</p>
+                <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 1 }}>{tr.styles[s].desc}</p>
               </div>
             </label>
           ))}
@@ -45,24 +38,19 @@ export default function Step5Details({ register, errors }: Props) {
       </div>
 
       <div>
-        <label className="label">Colores de tu marca <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(opcional)</span></label>
-        <input {...register("colors")} className="input" placeholder="Ej: azul marino #003366, blanco, dorado" />
+        <label className="label">{tr.colors} <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>{tr.colorsOptional}</span></label>
+        <input {...register("colors")} className="input" placeholder={tr.colorsPlaceholder} />
       </div>
 
       <div>
-        <label className="label">¿Para cuándo lo necesitas? *</label>
-        <input {...register("deadline", { required: "Campo requerido" })} type="date" className="input" />
+        <label className="label">{tr.deadline} *</label>
+        <input {...register("deadline", { required: tr.required })} type="date" className="input" />
         {errors.deadline && <p className="field-error">{errors.deadline.message}</p>}
       </div>
 
       <div>
-        <label className="label">¿Algo más que debamos saber? <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(opcional)</span></label>
-        <textarea
-          {...register("extraNotes")}
-          rows={4}
-          className="textarea"
-          placeholder="Detalles adicionales, restricciones, funcionalidades especiales, integraciones necesarias..."
-        />
+        <label className="label">{tr.extraNotes} <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>{tr.extraNotesOptional}</span></label>
+        <textarea {...register("extraNotes")} rows={4} className="textarea" placeholder={tr.extraNotesPlaceholder} />
       </div>
     </div>
   );
