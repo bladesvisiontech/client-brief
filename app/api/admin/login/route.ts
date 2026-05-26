@@ -1,21 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
-import { getAuth } from "firebase-admin/auth";
-import { getApps } from "firebase-admin/app";
+import { createSessionToken, COOKIE, MAX_AGE } from "@/lib/session";
+import { checkRateLimit, clearRateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const { allowed } = checkRateLimit(ip);
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many attempts. Try again in 15 minutes." },
+      { status: 429 }
+    );
+  }
+
   try {
     const { email, password } = await req.json();
 
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (email !== adminEmail) {
-      return NextResponse.json({ error: "Acceso denegado" }, { status: 403 });
+    if (email !== process.env.ADMIN_EMAIL) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    // Verificar credenciales via Firebase Auth REST API
-    const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
     const firebaseRes = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -24,19 +30,22 @@ export async function POST(req: NextRequest) {
     );
 
     if (!firebaseRes.ok) {
-      return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
+    clearRateLimit(ip);
+    const token = await createSessionToken(email);
+
     const res = NextResponse.json({ success: true });
-    res.cookies.set("admin_session", "authenticated", {
+    res.cookies.set(COOKIE, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 60 * 60 * 8,
+      maxAge: MAX_AGE,
       path: "/",
     });
     return res;
   } catch {
-    return NextResponse.json({ error: "Credenciales incorrectas" }, { status: 401 });
+    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 }

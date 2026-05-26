@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { encrypt } from "@/lib/crypto";
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,7 +8,12 @@ export async function POST(req: NextRequest) {
 
     const { clientName, businessName, email, phone, projectType, description } = body;
     if (!clientName || !businessName || !email || !phone || !projectType || !description) {
-      return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // Encrypt password before storing
+    if (body.emailSetupPassword) {
+      body.emailSetupPassword = await encrypt(body.emailSetupPassword);
     }
 
     const db = getAdminDb();
@@ -15,11 +21,12 @@ export async function POST(req: NextRequest) {
       ...body,
       createdAt: new Date().toISOString(),
       status: "pending",
+      internalNotes: "",
     });
 
     return NextResponse.json({ success: true, id: body.id });
   } catch (err) {
-    console.error("Error guardando brief:", err);
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
+    console.error("Error saving brief:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

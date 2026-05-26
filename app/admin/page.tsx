@@ -1,25 +1,19 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { verifySessionToken, COOKIE } from "@/lib/session";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 import LoginForm from "@/components/admin/LoginForm";
 
-export const metadata = { title: "Admin — Inmotion Brief" };
+export const metadata = { title: "Admin — Inmotion" };
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
-  const session = cookieStore.get("admin_session");
+  const token = cookieStore.get(COOKIE)?.value;
+  const authenticated = token ? await verifySessionToken(token) : false;
 
-  if (!session?.value) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <LoginForm />
-      </main>
-    );
+  if (!authenticated) {
+    return <LoginForm />;
   }
 
-  return (
-    <main className="min-h-screen bg-gray-50">
-      <AdminDashboard />
-    </main>
-  );
+  return <AdminDashboard />;
 }
