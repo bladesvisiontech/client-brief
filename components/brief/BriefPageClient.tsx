@@ -7,8 +7,8 @@ export default function BriefPageClient() {
   const { tr, toggleLang, lang } = useLang();
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--background)" }}>
-      <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 16px" }}>
+    <main style={{ minHeight: "100vh", background: "var(--background)", overflowX: "hidden" }}>
+      <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 16px", width: "100%" }}>
 
         {/* Lang toggle */}
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>

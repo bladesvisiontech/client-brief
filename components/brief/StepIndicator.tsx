@@ -7,14 +7,14 @@ export default function StepIndicator({ current }: { current: number }) {
   const steps = tr.steps;
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between">
+    <div className="mb-8" style={{ overflowX: "hidden" }}>
+      <div className="flex items-center justify-between" style={{ minWidth: 0 }}>
         {steps.map((label, i) => {
           const step = i + 1;
           const done = step < current;
           const active = step === current;
           return (
-            <div key={step} className="flex items-center flex-1">
+            <div key={step} className="flex items-center flex-1" style={{ minWidth: 0 }}>
               <div className="flex flex-col items-center gap-1.5">
                 <div style={{
                   width: 28, height: 28, borderRadius: "50%",
