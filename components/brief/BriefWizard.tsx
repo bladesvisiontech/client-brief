@@ -62,13 +62,22 @@ export default function BriefWizard() {
 
   if (submitted) {
     return (
-      <div className="text-center py-16 space-y-4">
-        <div className="text-6xl">🎉</div>
-        <h2 className="text-2xl font-bold text-gray-900">¡Brief enviado con éxito!</h2>
-        <p className="text-gray-500 max-w-md mx-auto">
-          Recibimos toda tu información. Nuestro equipo la revisará y te contactará pronto para empezar tu proyecto.
+      <div style={{ textAlign: "center", padding: "48px 0" }}>
+        <div style={{
+          width: 56, height: 56, borderRadius: "50%",
+          background: "var(--gray-100)", display: "flex",
+          alignItems: "center", justifyContent: "center",
+          margin: "0 auto 20px", fontSize: 24,
+        }}>✓</div>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+          Brief enviado
+        </h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 8, maxWidth: 360, margin: "8px auto 0" }}>
+          Recibimos toda tu información. Nuestro equipo la revisará y te contactará pronto para comenzar.
         </p>
-        <p className="text-xs text-gray-400">ID de tu brief: <span className="font-mono">{briefId}</span></p>
+        <p style={{ fontSize: 12, color: "var(--gray-400)", marginTop: 20 }}>
+          Referencia: <span style={{ fontFamily: "var(--font-geist-mono)" }}>{briefId}</span>
+        </p>
       </div>
     );
   }
@@ -77,27 +86,24 @@ export default function BriefWizard() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <StepIndicator current={step} />
 
-      <div className="min-h-[420px]">
+      <div style={{ minHeight: 400 }}>
         {step === 1 && <Step1Business register={register} errors={errors} />}
         {step === 2 && <Step2Project register={register} errors={errors} />}
         {step === 3 && <Step3Sections register={register} errors={errors} />}
-        {step === 4 && (
-          <Step4Assets
-            briefId={briefId}
-            assets={assets}
-            onAssetsChange={setAssets}
-          />
-        )}
+        {step === 4 && <Step4Assets briefId={briefId} assets={assets} onAssetsChange={setAssets} />}
         {step === 5 && <Step5Details register={register} errors={errors} />}
       </div>
 
-      <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 32,
+        paddingTop: 24,
+        borderTop: "1px solid var(--border)",
+      }}>
         {step > 1 ? (
-          <button
-            type="button"
-            onClick={back}
-            className="px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-black transition"
-          >
+          <button type="button" onClick={back} className="btn btn-secondary">
             ← Atrás
           </button>
         ) : (
@@ -105,20 +111,12 @@ export default function BriefWizard() {
         )}
 
         {step < 5 ? (
-          <button
-            type="button"
-            onClick={next}
-            className="px-8 py-2.5 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition"
-          >
+          <button type="button" onClick={next} className="btn btn-primary">
             Continuar →
           </button>
         ) : (
-          <button
-            type="submit"
-            disabled={submitting}
-            className="px-8 py-2.5 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {submitting ? "Enviando..." : "Enviar brief ✓"}
+          <button type="submit" disabled={submitting} className="btn btn-primary">
+            {submitting ? "Enviando..." : "Enviar brief"}
           </button>
         )}
       </div>

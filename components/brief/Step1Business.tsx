@@ -10,73 +10,51 @@ interface Props {
 
 export default function Step1Business({ register, errors }: Props) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Cuéntanos sobre ti</h2>
-        <p className="text-gray-500 mt-1">Necesitamos saber quién eres para ponernos en contacto.</p>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+          Cuéntanos sobre ti
+        </h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>
+          Necesitamos saber quién eres para ponernos en contacto contigo.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Tu nombre *
-          </label>
-          <input
-            {...register("clientName", { required: "Campo requerido" })}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
-            placeholder="Juan Pérez"
-          />
-          {errors.clientName && (
-            <p className="text-red-500 text-xs mt-1">{errors.clientName.message}</p>
-          )}
-        </div>
+        <Field label="Tu nombre *" error={errors.clientName?.message}>
+          <input {...register("clientName", { required: "Campo requerido" })} className="input" placeholder="Juan Pérez" />
+        </Field>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre del negocio *
-          </label>
-          <input
-            {...register("businessName", { required: "Campo requerido" })}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
-            placeholder="Mi Empresa S.A.S"
-          />
-          {errors.businessName && (
-            <p className="text-red-500 text-xs mt-1">{errors.businessName.message}</p>
-          )}
-        </div>
+        <Field label="Nombre del negocio *" error={errors.businessName?.message}>
+          <input {...register("businessName", { required: "Campo requerido" })} className="input" placeholder="Mi Empresa S.A.S" />
+        </Field>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Correo electrónico *
-          </label>
+        <Field label="Correo electrónico *" error={errors.email?.message}>
           <input
             {...register("email", {
               required: "Campo requerido",
               pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Email inválido" },
             })}
             type="email"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
+            className="input"
             placeholder="tu@email.com"
           />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
-          )}
-        </div>
+        </Field>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Teléfono / WhatsApp *
-          </label>
-          <input
-            {...register("phone", { required: "Campo requerido" })}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
-            placeholder="+57 300 000 0000"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
-          )}
-        </div>
+        <Field label="Teléfono / WhatsApp *" error={errors.phone?.message}>
+          <input {...register("phone", { required: "Campo requerido" })} className="input" placeholder="+57 300 000 0000" />
+        </Field>
       </div>
+    </div>
+  );
+}
+
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="label">{label}</label>
+      {children}
+      {error && <p className="field-error">{error}</p>}
     </div>
   );
 }

@@ -57,82 +57,85 @@ export default function Step4Assets({ briefId, onAssetsChange, assets }: Props) 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Sube tus archivos</h2>
-        <p className="text-gray-500 mt-1">Todos los archivos se guardan de forma privada y solo para tu proyecto.</p>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+          Sube tus archivos
+        </h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>
+          Todos los archivos se guardan de forma privada y exclusiva para tu proyecto.
+        </p>
       </div>
 
-      {/* Logo */}
-      <div className="border border-gray-200 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <p className="font-medium text-gray-900">Logo</p>
-            <p className="text-xs text-gray-500">PNG, SVG o PDF — tamaño original preferible</p>
-          </div>
-          {assets.logo && (
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-medium">✓ Subido</span>
-          )}
-        </div>
-        <label className="flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-black transition">
-          {uploading === "logo" ? (
-            <span className="text-sm text-gray-500 animate-pulse">Subiendo...</span>
-          ) : assets.logo ? (
-            <span className="text-sm text-gray-500">Cambiar logo</span>
-          ) : (
-            <span className="text-sm text-gray-400">+ Seleccionar logo</span>
-          )}
-          <input type="file" accept=".png,.svg,.pdf,.jpg,.jpeg,.webp" className="hidden" onChange={handleLogoUpload} />
-        </label>
-      </div>
+      <AssetBlock
+        title="Logo"
+        hint="PNG, SVG, PDF — en la mayor resolución posible"
+        status={assets.logo ? "✓ Subido" : null}
+        uploading={uploading === "logo"}
+        accept=".png,.svg,.pdf,.jpg,.jpeg,.webp"
+        onChange={handleLogoUpload}
+      />
 
-      {/* Fotos */}
-      <div className="border border-gray-200 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <p className="font-medium text-gray-900">Fotografías</p>
-            <p className="text-xs text-gray-500">Fotos del negocio, productos, equipo, etc. Puedes subir varias.</p>
-          </div>
-          {assets.photos.length > 0 && (
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-medium">
-              ✓ {assets.photos.length} foto(s)
-            </span>
-          )}
-        </div>
-        <label className="flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-black transition">
-          {uploading === "photos" ? (
-            <span className="text-sm text-gray-500 animate-pulse">Subiendo...</span>
-          ) : (
-            <span className="text-sm text-gray-400">+ Seleccionar fotos (múltiples)</span>
-          )}
-          <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotosUpload} />
-        </label>
-      </div>
+      <AssetBlock
+        title="Fotografías"
+        hint="Fotos del negocio, productos o equipo. Puedes subir varias."
+        status={assets.photos.length > 0 ? `✓ ${assets.photos.length} foto(s)` : null}
+        uploading={uploading === "photos"}
+        accept="image/*"
+        multiple
+        onChange={handlePhotosUpload}
+      />
 
-      {/* Documentos */}
-      <div className="border border-gray-200 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <p className="font-medium text-gray-900">Documentos / Textos</p>
-            <p className="text-xs text-gray-500">PDF, Word, Excel con información del negocio, textos, catálogos, etc.</p>
-          </div>
-          {assets.documents.length > 0 && (
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-medium">
-              ✓ {assets.documents.length} archivo(s)
-            </span>
-          )}
-        </div>
-        <label className="flex items-center justify-center w-full h-24 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-black transition">
-          {uploading === "docs" ? (
-            <span className="text-sm text-gray-500 animate-pulse">Subiendo...</span>
-          ) : (
-            <span className="text-sm text-gray-400">+ Seleccionar documentos</span>
-          )}
-          <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" multiple className="hidden" onChange={handleDocsUpload} />
-        </label>
-      </div>
+      <AssetBlock
+        title="Documentos / Textos"
+        hint="PDF, Word, Excel con información, catálogos o contenido del sitio."
+        status={assets.documents.length > 0 ? `✓ ${assets.documents.length} archivo(s)` : null}
+        uploading={uploading === "docs"}
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.txt"
+        multiple
+        onChange={handleDocsUpload}
+      />
 
-      <p className="text-xs text-gray-400 text-center">
+      <p style={{ fontSize: 12, color: "var(--gray-400)", textAlign: "center" }}>
         Los archivos son opcionales. Puedes enviarnos más por WhatsApp después si lo necesitas.
       </p>
+    </div>
+  );
+}
+
+function AssetBlock({
+  title, hint, status, uploading, accept, multiple, onChange,
+}: {
+  title: string;
+  hint: string;
+  status: string | null;
+  uploading: boolean;
+  accept: string;
+  multiple?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div style={{ border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "16px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 10 }}>
+        <div>
+          <p style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)" }}>{title}</p>
+          <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 2 }}>{hint}</p>
+        </div>
+        {status && (
+          <span className="badge badge-green">{status}</span>
+        )}
+      </div>
+      <label className="upload-zone">
+        {uploading ? (
+          <span style={{ fontSize: 13, color: "var(--gray-400)" }}>Subiendo...</span>
+        ) : (
+          <>
+            <span style={{ fontSize: 20, color: "var(--gray-300)" }}>↑</span>
+            <span style={{ fontSize: 13, color: "var(--gray-500)" }}>
+              {status ? "Subir más" : "Seleccionar archivo(s)"}
+            </span>
+          </>
+        )}
+        <input type="file" accept={accept} multiple={multiple} className="hidden" onChange={onChange} />
+      </label>
     </div>
   );
 }

@@ -18,69 +18,49 @@ const projectTypes: { value: ProjectType; label: string; desc: string }[] = [
 
 export default function Step2Project({ register, errors }: Props) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">El proyecto</h2>
-        <p className="text-gray-500 mt-1">Cuéntanos qué quieres construir.</p>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+          El proyecto
+        </h2>
+        <p style={{ fontSize: 14, color: "var(--gray-500)", marginTop: 4 }}>
+          Cuéntanos qué quieres construir.
+        </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Tipo de proyecto *
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <label className="label">Tipo de proyecto *</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {projectTypes.map((type) => (
-            <label
-              key={type.value}
-              className="flex items-start gap-3 border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-black transition has-[:checked]:border-black has-[:checked]:bg-black/5"
-            >
-              <input
-                type="radio"
-                value={type.value}
-                {...register("projectType", { required: "Selecciona un tipo" })}
-                className="mt-0.5 accent-black"
-              />
+            <label key={type.value} className="option-card">
+              <input type="radio" value={type.value} {...register("projectType", { required: "Selecciona un tipo" })} style={{ accentColor: "var(--foreground)", marginTop: 2 }} />
               <div>
-                <p className="text-sm font-medium text-gray-900">{type.label}</p>
-                <p className="text-xs text-gray-500">{type.desc}</p>
+                <p style={{ fontSize: 13, fontWeight: 500, color: "var(--foreground)" }}>{type.label}</p>
+                <p style={{ fontSize: 12, color: "var(--gray-500)", marginTop: 1 }}>{type.desc}</p>
               </div>
             </label>
           ))}
         </div>
-        {errors.projectType && (
-          <p className="text-red-500 text-xs mt-1">{errors.projectType.message}</p>
-        )}
+        {errors.projectType && <p className="field-error">{errors.projectType.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Describe tu proyecto *
-        </label>
+        <label className="label">Describe tu proyecto *</label>
         <textarea
           {...register("description", { required: "Campo requerido", minLength: { value: 20, message: "Mínimo 20 caracteres" } })}
           rows={4}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition resize-none"
+          className="textarea"
           placeholder="Ej: Necesito un sitio web para mi restaurante donde los clientes puedan ver el menú, hacer reservas y contactarnos..."
         />
-        {errors.description && (
-          <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
-        )}
+        {errors.description && <p className="field-error">{errors.description.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Páginas de referencia (opcional)
-        </label>
-        <input
-          {...register("referenceUrls.0")}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition mb-2"
-          placeholder="https://ejemplo.com"
-        />
-        <input
-          {...register("referenceUrls.1")}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
-          placeholder="https://otro-ejemplo.com"
-        />
+        <label className="label">Páginas de referencia <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(opcional)</span></label>
+        <div className="space-y-2">
+          <input {...register("referenceUrls.0")} className="input" placeholder="https://ejemplo.com" />
+          <input {...register("referenceUrls.1")} className="input" placeholder="https://otro-ejemplo.com" />
+        </div>
       </div>
     </div>
   );

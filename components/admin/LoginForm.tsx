@@ -22,7 +22,7 @@ export default function LoginForm() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Error al iniciar sesión");
+        setError(data.error || "Credenciales incorrectas");
         return;
       }
       router.refresh();
@@ -34,46 +34,51 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-sm">
-      <div className="text-center mb-8">
-        <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-2">Inmotion</p>
-        <h1 className="text-2xl font-bold text-gray-900">Panel de administración</h1>
+    <div style={{ width: "100%", maxWidth: 360 }}>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          background: "#fff", border: "1px solid var(--border)",
+          borderRadius: 8, padding: "6px 12px", marginBottom: 16,
+        }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--foreground)" }} />
+          <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.05em" }}>INMOTION</span>
+        </div>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em" }}>
+          Panel de administración
+        </h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+      <form onSubmit={handleSubmit} className="card" style={{ padding: 24 }}>
+        <div style={{ marginBottom: 16 }}>
+          <label className="label">Email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
+            className="input"
             placeholder="tu@email.com"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+        <div style={{ marginBottom: 20 }}>
+          <label className="label">Contraseña</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
+            className="input"
             placeholder="••••••••"
           />
         </div>
 
         {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
+          <p style={{ fontSize: 13, color: "var(--error)", textAlign: "center", marginBottom: 16 }}>{error}</p>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-black text-white py-3 rounded-xl text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: "100%" }}>
           {loading ? "Entrando..." : "Entrar"}
         </button>
       </form>
