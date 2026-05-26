@@ -48,7 +48,7 @@ export default function BriefPageClient() {
         {/* Footer */}
         <p style={{ textAlign: "center", fontSize: 12, color: "var(--gray-400)", marginTop: 24 }}>
           {tr.briefFooter}{" "}
-          <a href="mailto:hello@bladestech.com" style={{ color: "var(--gray-600)", textDecoration: "underline" }}>
+          <a href="mailto:info@inmotionteam.com" style={{ color: "var(--gray-600)", textDecoration: "underline" }}>
             {tr.briefFooterLink}
           </a>
         </p>
