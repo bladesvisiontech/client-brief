@@ -37,10 +37,16 @@ export default function BriefWizard() {
 
   async function next() {
     const valid = await trigger(stepFields[step]);
-    if (valid) setStep((s) => s + 1);
+    if (valid) {
+      setStep((s) => s + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
 
-  function back() { setStep((s) => s - 1); }
+  function back() {
+    setStep((s) => s - 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   async function onSubmit(data: Brief) {
     setSubmitting(true);
