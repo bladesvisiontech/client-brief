@@ -29,6 +29,10 @@ export interface Brief {
   businessName: string;
   email: string;
   phone: string;
+  // Correo del sistema
+  notificationEmail: string;
+  emailSetup: "create" | "existing" | "none";
+  emailSetupDetail: string;
   // Paso 2 - Proyecto
   projectType: ProjectType;
   description: string;

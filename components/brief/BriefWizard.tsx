@@ -21,12 +21,12 @@ export default function BriefWizard() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const { register, handleSubmit, trigger, formState: { errors } } = useForm<Brief>({
+  const { register, handleSubmit, trigger, watch, formState: { errors } } = useForm<Brief>({
     defaultValues: { referenceUrls: [], sections: [], assets: { photos: [], documents: [] } },
   });
 
   const stepFields: Record<number, (keyof Brief)[]> = {
-    1: ["clientName", "businessName", "email", "phone"],
+    1: ["clientName", "businessName", "email", "phone", "notificationEmail", "emailSetup"],
     2: ["projectType", "description"],
     3: ["sections"],
     4: [],
@@ -87,7 +87,7 @@ export default function BriefWizard() {
       <StepIndicator current={step} />
 
       <div style={{ minHeight: 400 }}>
-        {step === 1 && <Step1Business register={register} errors={errors} />}
+        {step === 1 && <Step1Business register={register} errors={errors} watch={watch} />}
         {step === 2 && <Step2Project register={register} errors={errors} />}
         {step === 3 && <Step3Sections register={register} errors={errors} />}
         {step === 4 && <Step4Assets briefId={briefId} assets={assets} onAssetsChange={setAssets} />}
